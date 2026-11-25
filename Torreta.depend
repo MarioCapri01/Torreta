@@ -1,4 +1,7 @@
 # depslib dependency file v1.0
-1794227459 source:c:\proyectosraylib\torreta\main.c
+1795525191 source:c:\proyectosraylib\torreta\main.c
 	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
 

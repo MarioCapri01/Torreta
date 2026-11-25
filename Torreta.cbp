@@ -35,6 +35,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="assets/torreta.png" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
