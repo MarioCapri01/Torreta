@@ -74,7 +74,7 @@ int main(void)
 
     int frameBalaWidth = texturaBala.width;
     int frameBalaHeight = texturaBala.height;
-    float escalaBala = 0.3f;
+    float escalaBala = 0.2f;
     //Vector posicion Bala
     /*
     Rectangle destRecBala = { screenWidth/2.0f, screenHeight/2.0f, frameBalaWidth/2.0f, frameBalaHeight/2.0f};
@@ -101,7 +101,7 @@ int main(void)
         // Añadimos una nueva bala si se pulsa la tecla
         if(IsKeyPressed(KEY_SPACE))
         {
-                balas[contadorBalas].habilitada = true;
+                balas[contadorBalas].habilitada = false;
                 balas[contadorBalas].position = (Vector2){(float) ((screenWidth - (frameBalaWidth * escalaBala))/2), (float) ((screenHeight - (frameBalaHeight * escalaBala))/2)};
                 balas[contadorBalas].acceleration = (Vector2){
                         velocidadBala*cosf(rotacionTorreta*DEG2RAD),
@@ -129,14 +129,13 @@ int main(void)
 
             ClearBackground(RAYWHITE);
 
-            //Dibuja una textura a partir de un rectángulo de rectángulo de destino, rectángulo fuente, con rotación y escalado
-            DrawTexturePro(torreta, sourceRecTorreta, destRecTorreta, vectorCentro, rotacion, WHITE);
 
             // Dibuja las balas
             for (int i = 0; i < contadorBalas; i++){
-                DrawTextureEx(texturaBala, balas[i].position, 0.0f, escalaBala, WHITE);
-
+                if(balas[i].habilitada) DrawTextureEx(texturaBala, balas[i].position, 0.0f, escalaBala, WHITE);
             }
+            //Dibuja una textura a partir de un rectángulo de rectángulo de destino, rectángulo fuente, con rotación y escalado
+            DrawTexturePro(torreta, sourceRecTorreta, destRecTorreta, vectorCentro, rotacion, WHITE);
 
         //FIN DIBUJO
         EndDrawing();
