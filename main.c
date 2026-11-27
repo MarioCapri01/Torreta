@@ -37,9 +37,26 @@
 
 typedef struct Bala {
     bool habilitada;
-    Vector2 position;       // Bullet position on screen
-    Vector2 acceleration;   // Amount of pixels to be incremented to position every frame
+    Vector2 position;       // Posicion de la Bala en pantalla
+    Vector2 acceleration;   // Calculo de aceleracion de la bala
 } Bala;
+
+#define MAX_MORDISCOS 6
+
+typedef struct Mordiscos1 {
+    bool habilitado;
+    Vector2 position;       // Posicion de mordiscos en pantalla
+    Vector2 acceleration;   // Calculo de aceleracion de mordiscos
+} Mordiscos1;
+
+bool sonMultiplos(int numGrande, int numChico){
+    int primerNumero = numGrande;
+    int segundoNumero = numChico;
+    if(primerNumero % segundoNumero == 0){
+        printf("%d mod %d = %d\n", primerNumero, segundoNumero, primerNumero % segundoNumero);
+    }
+    return ((primerNumero) % (primerNumero) < 1);
+}
 
 int main(void)
 {
@@ -75,17 +92,22 @@ int main(void)
     int frameBalaWidth = texturaBala.width;
     int frameBalaHeight = texturaBala.height;
     float escalaBala = 0.2f;
-    //Vector posicion Bala
-    /*
-    Rectangle destRecBala = { screenWidth/2.0f, screenHeight/2.0f, frameBalaWidth/2.0f, frameBalaHeight/2.0f};
-    Vector2 posicionBala = { (float)destRecBala.width/2, (float)destRecBala.height/2 };
-    */
     int contadorBalas = 0;
     float velocidadBala = 9.0f;
     int rotacionTorreta = rotacion - 90;
-    printf("rotacion Torreta: %d\n", rotacionTorreta);
     //FIN BALA
 
+    //INICIO MORDISCOS1
+    Texture2D texturaMordiscos = LoadTexture("assets/Mordiscos1.png");
+
+    Mordiscos1 *mordiscos = (Mordiscos1 *)RL_CALLOC(MAX_MORDISCOS, sizeof(Mordiscos1));
+    int frameMordiscosWidth = texturaMordiscos.width;
+    int frameMordiscosHeight = texturaMordiscos.height;
+    float velocidadMordiscos = 3.0f;
+    double marcaTiempo = 3;
+    int contadorMordiscos = 0;
+
+    //FIN MORDISCOS1
     SetTargetFPS(60);
     while (!WindowShouldClose())
     {
@@ -101,16 +123,13 @@ int main(void)
         // Añadimos una nueva bala si se pulsa la tecla
         if(IsKeyPressed(KEY_SPACE))
         {
-                balas[contadorBalas].habilitada = false;
+                balas[contadorBalas].habilitada = true;
                 balas[contadorBalas].position = (Vector2){(float) ((screenWidth - (frameBalaWidth * escalaBala))/2), (float) ((screenHeight - (frameBalaHeight * escalaBala))/2)};
                 balas[contadorBalas].acceleration = (Vector2){
                         velocidadBala*cosf(rotacionTorreta*DEG2RAD),
                         velocidadBala*sinf(rotacionTorreta*DEG2RAD)
                     };
                 contadorBalas++;
-                printf("screenWidth: %d\n", screenWidth);
-                printf("rotación: %d\n", rotacion);
-                printf("vector: %d\n", rotacion);
         }
 
         // Actualizamos posición de cada bala
@@ -122,6 +141,14 @@ int main(void)
                 // Comprobamos si debemo eliminar la bala
                 if(balas[i].position.x > screenWidth || balas[i].position.y > screenHeight) balas[i].habilitada = false;
             }
+        }
+
+        // Si no se ha alcanzado el numero máximo de enemigos, y hemos llegado a la marca de tiempo (tiempo transcurrido - Marca de tiempo < Casi 0)
+        if ((contadorMordiscos < MAX_MORDISCOS) && (fabs(GetTime() - marcaTiempo) < 0.1)){
+                printf("HAN PASADO 3 SEGUNDOS (%d = %d)!!\n", (fabs(GetTime()), marcaTiempo));
+
+                //Actualizamos la nueva Marca de tiempo
+                marcaTiempo += 3;
         }
 
         //INICIO DIBUJO
